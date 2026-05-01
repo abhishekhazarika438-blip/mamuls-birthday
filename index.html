@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For MAMLII 💖</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+
+<style>
+body {
+  margin:0;
+  font-family:'Poppins',sans-serif;
+  background: linear-gradient(135deg,#ff9a9e,#fad0c4);
+  text-align:center;
+  color:white;
+}
+
+.screen { display:none; padding:20px; }
+.active { display:block; }
+
+input {
+  padding:10px;
+  border:none;
+  border-radius:20px;
+  text-align:center;
+}
+
+button {
+  padding:10px 20px;
+  border:none;
+  border-radius:20px;
+  background:white;
+  color:#ff6f91;
+  cursor:pointer;
+  margin-top:10px;
+}
+
+.cake-img {
+  width:220px;
+  border-radius:15px;
+  margin-top:20px;
+}
+
+.gifts {
+  display:flex;
+  justify-content:center;
+  gap:20px;
+  margin-top:20px;
+}
+
+.gift {
+  font-size:45px;
+  cursor:pointer;
+}
+
+.gallery {
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+  margin-top:20px;
+}
+
+.gallery img {
+  width:100%;
+  border-radius:10px;
+}
+
+.letter {
+  background:rgba(255,255,255,0.2);
+  padding:15px;
+  border-radius:15px;
+  margin-top:20px;
+  min-height:150px;
+}
+
+.cursor {
+  width:2px;
+  background:white;
+  display:inline-block;
+  animation:blink 1s infinite;
+}
+
+@keyframes blink {
+  0%,100%{opacity:1;}
+  50%{opacity:0;}
+}
+
+canvas {
+  position:fixed;
+  top:0;
+  left:0;
+  pointer-events:none;
+}
+</style>
+</head>
+
+<body>
+
+<!-- 🎶 MUSIC -->
+<audio id="bgMusic" loop>
+  <source src="music/until-i-found-you.mp3" type="audio/mpeg">
+</audio>
+
+<!-- PASSCODE -->
+<div id="lock" class="screen active">
+  <h2>Enter Passcode 🔐</h2>
+  <input type="password" id="code">
+  <br>
+  <button onclick="checkCode()">Unlock 💖</button>
+</div>
+
+<!-- CAKE -->
+<div id="cake" class="screen">
+  <h1>🎂 Happy Birthday, MAMLII 💖</h1>
+  <p>Make a wish ✨</p>
+
+  <img src="images/cake.jpg" class="cake-img">
+
+  <br>
+  <button onclick="blowCandles()">BLOW 🕯️</button>
+</div>
+
+<!-- GIFTS -->
+<div id="gifts" class="screen">
+  <h2>🎁 Open Your Gifts</h2>
+
+  <div class="gifts">
+    <div class="gift" onclick="openGift(1)">🎁</div>
+    <div class="gift" onclick="openGift(2)">🎁</div>
+    <div class="gift" onclick="openGift(3)">🎁</div>
+  </div>
+
+  <!-- GOOFY -->
+  <div id="gift1" class="screen">
+    <h3>Our Goofy Moments 😂</h3>
+    <div class="gallery">
+      <img src="images/goofy1.jpg">
+      <img src="images/goofy2.jpg">
+    </div>
+  </div>
+
+  <!-- LETTER -->
+  <div id="gift2" class="screen">
+    <h3>A Letter For You 💌</h3>
+    <div class="letter">
+      <span id="typeText"></span><span class="cursor"></span>
+    </div>
+  </div>
+
+  <!-- MEMORIES -->
+  <div id="gift3" class="screen">
+    <h3>Our Memories 💕</h3>
+    <div class="gallery">
+      <img src="images/memory1.jpg">
+      <img src="images/memory2.jpg">
+    </div>
+  </div>
+
+</div>
+
+<canvas id="confetti"></canvas>
+
+<script>
+// 🔐 PASSCODE + MUSIC
+function checkCode(){
+  if(document.getElementById("code").value==="0205"){
+    document.getElementById("bgMusic").play();
+    showScreen("cake");
+  } else alert("Wrong code 😤");
+}
+
+// SCREEN SWITCH
+function showScreen(id){
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  if(id==="gift2") startTyping();
+}
+
+// BLOW
+function blowCandles(){
+  startConfetti();
+  setTimeout(()=>showScreen("gifts"),2000);
+}
+
+// GIFTS
+function openGift(n){
+  showScreen("gift"+n);
+}
+
+// 💌 TYPEWRITER + GLOW
+const msg=`Dear MAMLII,
+
+I don’t think I say this enough, but you are one of the most important people in my life.
+
+You’re not just my best friend… you’re my comfort, my safe place, and the person I can always come back to, no matter what.
+
+With you, everything feels lighter, easier, and somehow more beautiful. Even the smallest moments turn into memories I never want to forget.
+
+You’ve seen me at my worst and still stayed. You’ve laughed with me, stood by me, and made life feel a little less overwhelming just by being in it.
+
+And I hope you know… I’ll always do the same for you. Always.
+
+I hope this year brings you the kind of happiness you bring into my life every single day.
+
+You deserve love that’s soft, pure, and endless… just like you.
+
+Happy Birthday, my favorite person 💖
+
+Forever yours,  
+Bulb 🫶`;
+
+let i=0;
+
+function startTyping(){
+  let el=document.getElementById("typeText");
+  el.innerHTML="";
+  i=0;
+
+  function type(){
+    if(i<msg.length){
+      if(msg.substring(i, i+6) === "MAMLII"){
+        el.innerHTML += "<span style='color:#fff; text-shadow:0 0 10px #fff,0 0 20px #ff6f91;'>MAMLII</span>";
+        i+=6;
+      } else {
+        el.innerHTML += msg.charAt(i);
+        i++;
+      }
+      setTimeout(type,40);
+    }
+  }
+  type();
+}
+
+// 🎉 CONFETTI
+const canvas=document.getElementById("confetti");
+const ctx=canvas.getContext("2d");
+canvas.width=innerWidth;
+canvas.height=innerHeight;
+
+let confetti=[];
+function startConfetti(){
+  confetti=[];
+  for(let i=0;i<150;i++){
+    confetti.push({
+      x:Math.random()*canvas.width,
+      y:Math.random()*canvas.height,
+      r:Math.random()*6+2,
+      color:"hsl("+Math.random()*360+",100%,50%)"
+    });
+  }
+  setInterval(draw,20);
+}
+
+function draw(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  confetti.forEach(c=>{
+    ctx.fillStyle=c.color;
+    ctx.fillRect(c.x,c.y,c.r,c.r);
+    c.y+=2;
+    if(c.y>canvas.height)c.y=0;
+  });
+}
+</script>
+
+</body>
+</html>
